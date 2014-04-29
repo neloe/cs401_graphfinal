@@ -1,7 +1,9 @@
 .PHONY: clean flags
 
 CXX = g++
-CXXFLAGS = -std=c++0x -g
+CXXFLAGS = -std=c++0x -g -pg
+
+LDFLAGS = -lpthread
 
 ifeq (${CXX}, clang++)
 	CXXFLAGS = -std=c++11 -g
@@ -18,13 +20,13 @@ default: driver
 	@${CXX} ${CXXFLAGS} -c $< -o $@
 
 driver: driver.o lorenz.o
-	@${CXX} ${CXXFLAGS} $^ -o $@
+	@${CXX} ${CXXFLAGS} ${LDFLAGS} $^ -o $@
 	
 seq: seq_lorenz.o
 	${CXX} ${CXXFLAGS} $^ -o $@
 
 clean:
-	-@rm -f seq
+	-@rm -f seq driver
 	-@rm -f $(OBJS)
 
 flags:
