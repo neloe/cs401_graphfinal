@@ -9,6 +9,7 @@
 #include <iostream>
 using namespace std;
 
+const int SLEEP_TIME = 0;
 point operator* (const double & s, const point& p)
 {
   return {s * p.x, s * p.y, s * p.z};
@@ -33,18 +34,22 @@ std::ostream& operator << (std::ostream& o, const point& p)
   return o;
 }
 
+
 double xdot (const point& p)
 {
-  return P * (p.y - p.x);
+  usleep(SLEEP_TIME);
+    return P * (p.y - p.x);
 }
 
 double ydot(const point& p)
 {
+  usleep(SLEEP_TIME);
   return R *  p.x - p.y - p.x * p.z;
 }
 
 double zdot(const point& p)
 {
+  usleep(SLEEP_TIME);
   return p.x * p.y - B * p.z;
 }
 
@@ -70,15 +75,15 @@ double scaledot(dyn_var f, const point& p)
 
 void launch_xyz(future<double>& fx, future<double>& fy, future<double>& fz, const point& p)
 {
-  fx = std::async(scaledot, xdot, p);
-  fy = std::async(scaledot, ydot, p);
-  fz = std::async(scaledot, zdot, p);
+  fx = std::async(launch::async,scaledot, xdot, p);
+  fy = std::async(launch::async,scaledot, ydot, p);
+  fz = std::async(launch::async,scaledot, zdot, p);
 }
 
 void launch_xy(future<double>& fx, future<double>& fy, const point& p)
 {
-  fx = std::async(scaledot, xdot, p);
-  fy = std::async(scaledot, ydot, p);
+  fx = std::async(launch::async,scaledot, xdot, p);
+  fy = std::async(launch::async,scaledot, ydot, p);
 }
 
 
