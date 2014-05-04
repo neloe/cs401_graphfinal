@@ -1,7 +1,7 @@
 .PHONY: clean flags
 
 CXX = g++
-CXXFLAGS = -std=c++0x -O3 
+CXXFLAGS = -std=c++0x -Og 
 
 LDFLAGS = -lpthread
 
